@@ -1,0 +1,7 @@
+{
+    "name": "application-name",
+    "version": "0.0.1",
+    "devDependencies": {
+        "jasmine": "https://github.com/pivotal/jasmine-npm/archive/master.tar.gz"
+    }
+}
