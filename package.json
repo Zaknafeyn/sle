@@ -1,7 +1,15 @@
 {
-    "name": "application-name",
-    "version": "0.0.1",
-    "devDependencies": {
-        "jasmine": "https://github.com/pivotal/jasmine-npm/archive/master.tar.gz"
-    }
+  "name": "application-name",
+  "version": "0.0.1",
+  "devDependencies": {
+    "jasmine": "https://github.com/pivotal/jasmine-npm/archive/master.tar.gz",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5"
+  },
+  "dependencies": {
+    "istanbul": "^0.3.2",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.4"
+  }
 }

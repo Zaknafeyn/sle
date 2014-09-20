@@ -1,66 +1,59 @@
 /**
  * Created by Valik on 12.09.2014.
  */
-/*
-function  gauss(matrixCoeff, vectorEquationResults) {
-    for(var i = 0; i< matrixCoeff.length; i++) {
-        var a = matrixCoeff[i][i];
-        for (var j = i+1; j < matrixCoeff.length; j++){
-            var b = matrixCoeff[j][i];
-            for (var k=i; k< matrixCoeff.length + 1; k++){
-                matrixCoeff[j][k] = matrixCoeff[i][k] * b - matrixCoeff[j][k] * a;
-            }
-        }
-    }
 
-    for (var i = matrixCoeff)
-}*/
+function Gaussian(_matrix, _dimension) {
+    this.matrix = _matrix;
 
-function Gaussian(matrix) {
-    var matrix = matrix;
-
-    var dimention = matrix.length;
-    var vector = new Array(dimention);
+    this.dimension = _dimension;
+    this.vector = new Array(this.dimension);
 
     this.validate = function () {
-        if (matrix.length != dimention)
+
+        if (this.matrix.length != this.dimension+1)
             return 1;
 
-        if (vector.length != dimention)
-            return 1;
+        for(var i =0; i< this.matrix.length; i++)
+        {
+            if (this.matrix[i].length != this.dimension)
+            return 2;
+        }
+
+        if (this.vector.length != this.dimension)
+            return 3;
 
         return 0;
-    }
+    };
 
-    var directGauss = function () {
-        for (var i = 0; i < dimention - 1; i++) {
-            var a = matrix[i][i];
-            for (var j = i + 1; j < dimention; j++) {
-                var temp = matrix[i][i] / matrix[j][i];
-                for (var k = 0; k <= dimention; k++) {
-                    matrix[j][k] = matrix[j][k] * temp - matrix[i][k];
+    this.directGauss = function () {
+        for (var i = 0; i < this.dimension - 1; i++) {
+            for (var j = i + 1; j < this.dimension; j++) {
+                var temp = this.matrix[i][i] / this.matrix[i][j];
+                for (var k = 0; k <= this.dimension; k++) {
+                    this.matrix[k][j] = this.matrix[k][j] * temp - this.matrix[k][i];
                 }
             }
         }
-    }
+    };
 
-    var reverseGauss = function () {
-        vector[dimention - 1] = matrix [dimention - 1][dimention] / matrix [dimention - 1][dimention - 1];
-        for (var i = dimention - 2; i >= 0; i--) {
+    this.reverseGauss = function () {
+        this.vector[this.dimension - 1] = Math.round(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
+        for (var i = this.dimension - 2; i >= 0; i--) {
             var temp = 0;
-            for (var j = i + 1; j < dimention; j++) {
-                temp += matrix[i][j] * vector[j];
+            for (var j = i + 1; j < this.dimension; j++) {
+                temp += this.matrix[j][i] * this.vector[j];
             }
-            vector[i] = (matrix[i][dimention] - temp) / matrix[i][i];
+            this.vector[i] = Math.round((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
         }
-    }
+    };
 
     this.calculate = function () {
         // direct
-        directGauss();
+        this.directGauss();
 
         // reverse
-        reverseGauss();
+        this.reverseGauss();
 
+        return this.vector;
     }
 }
