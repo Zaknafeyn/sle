@@ -104,22 +104,32 @@ function getInputsAndCalculate(){
     matrix[dimension] = freeCoeffVector;
 
     var matrixCalc = new Gaussian(matrix, dimension);
-    var result = matrixCalc.calculate();
+    var errCode = matrixCalc.calculate();
+    var resultVector = matrixCalc.getResult();
 
-    displayResults(result, "#solutionPlaceholder")
+    displayResults(errCode, resultVector, "#solutionPlaceholder")
 }
 
-function displayResults(resultVector, containerName){
+function displayResults(errorCode, resultVector, containerName){
 
     $(containerName).show();
     // clean container
     $(containerName).html("");
+
     var html = "<h3>Results</h3>";
-    html += '<ul class="list-unstyled">';
-    for(var i = 0; i < resultVector.length; i++){
-        html += '<li><label>x<sub>' + (i+1) + '</sub>&nbsp;=&nbsp;' + resultVector[i] + '</label></li>';
+
+    if(errorCode == 1){
+
+        html += '<label class="label-danger">There are no solutions for this SLE</label>';
     }
-    html += "</ul>";
+    else {
+
+        html += '<ul class="list-unstyled">';
+        for (var i = 0; i < resultVector.length; i++) {
+            html += '<li><label>x<sub>' + (i + 1) + '</sub>&nbsp;=&nbsp;' + resultVector[i] + '</label></li>';
+        }
+        html += "</ul>";
+    }
 
     $(containerName).after().html(html);
 }
