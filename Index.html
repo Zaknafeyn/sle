@@ -44,9 +44,6 @@
         <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">About</a>
-                </li>
-                <li>
                     <a href="http://cv.vradchuk.info">Contact</a>
                 </li>
             </ul>
@@ -74,12 +71,14 @@
         </div>
 
         <div class="col-md-9">
-
             <div class="thumbnail">
                 <div id="equationContainer" style="width:800px; height: 233px;" class ="text-center">
                     <h1>Select SLE rank at the left menu</h1>
                 </div>
                 <div id="calcButtonPlaceholder" class="text-center" style="width:800px; display: none;">
+                    <button class="btn btn-primary" onclick="getInputsAndCalculate();">Calculate</button>
+                </div>
+                <div id="solutionPlaceholder" class="text-center" style="width:800px; display: none;">
                     <button class="btn btn-primary" onclick="getInputsAndCalculate();">Calculate</button>
                 </div>
             </div>
