@@ -49,3 +49,13 @@ describe("Control example sle 2", function() {
         expect(gaussian.calculate()).toEqual(result);
     });
 });
+
+describe("Control example sle 4", function() {
+    it("Calculates matrix", function() {
+        var matrix = [[0,1000,-3,4],[1,3,4,0],[3,1,1,-2],[2,-5,4,-3],[-1,-2,-1,4]];
+        var result = [2,3,-1];
+        var gaussian = new Gaussian(matrix, 3);
+        expect(gaussian.validate()).toEqual(0);
+        expect(gaussian.calculate()).toEqual(result);
+    });
+});

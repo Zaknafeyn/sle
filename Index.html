@@ -1,17 +1,119 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calculator of System of linear Equations by Gaussian method | 4kottans.org">
+    <meta name="author" content="Valentine Radchuk">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
     <title>Calculator of System of linear Equations by Gaussian method | 4kottans.org</title>
     <link href="content/bootstrap/css/bootstrap.css" type="text/css" rel="stylesheet"/>
+    <link href="content/styles.css" type="text/css" rel="stylesheet"/>
     <script type="text/javascript" src="js/gauss_calc.js"></script>
+
+    <script type="text/javascript" src="js/interface.js"></script>
+
 </head>
+
 <body>
-<div class="navbar navbar-fixed-top">
+
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar">test</span>
+                <span class="icon-bar">test</span>
+                <span class="icon-bar">test</span>
+            </button>
+            <a class="navbar-brand" href="#">SLE project for Kottans.org</a>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="http://cv.vradchuk.info">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+<!-- Page Content -->
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <p class="lead">Shop Name</p>
+            <div class="list-group" id="left-menu">
+                <a href="#" onclick="arrangeMatrix(2, '#equationContainer');" class="list-group-item">Rank 2</a>
+                <a href="#" onclick="arrangeMatrix(3, '#equationContainer');" class="list-group-item">Rank 3</a>
+                <a href="#" onclick="arrangeMatrix(4, '#equationContainer');" class="list-group-item">Rank 4</a>
+                <a href="#" onclick="arrangeMatrix(5, '#equationContainer');" class="list-group-item">Rank 5</a>
+                <a href="#" onclick="arrangeMatrix(6, '#equationContainer');" class="list-group-item">Rank 6</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <div class="thumbnail">
+                <div id="test" class="form-inline">
+                    <input type="text" class="form-control col-sm-1"  />
+                    <input type="text" class="form-control col-sm-1"  />
+                </div>
+                <div id="equationContainer" style="width:800px; height: 300px;" class ="text-center">
+                    <h1>Select SLE rank at the left menu</h1>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
-<div class="container-fluid">
+<!-- /.container -->
+
+<div class="container">
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <p>System of Linear Equations Calculator 2014 - <a href="http://cv.vradchuk.info">Valentine Radchuk</a> </p>
+            </div>
+        </div>
+    </footer>
 
 </div>
+<!-- /.container -->
+
+<!-- jQuery Version 1.11.0 -->
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="content/bootstrap/js/bootstrap.min.js"></script>
+
 </body>
+
 </html>
