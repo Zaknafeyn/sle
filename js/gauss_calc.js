@@ -6,7 +6,7 @@ function Gaussian(_matrix, _dimension) {
     this.matrix = _matrix;
 
     this.dimension = _dimension;
-    this.vector = new Array(this.dimension);
+    this.resultVector = new Array(this.dimension);
 
     this.validate = function () {
 
@@ -19,7 +19,7 @@ function Gaussian(_matrix, _dimension) {
             return 2;
         }
 
-        if (this.vector.length != this.dimension)
+        if (this.resultVector.length != this.dimension)
             return 3;
 
         return 0;
@@ -37,23 +37,52 @@ function Gaussian(_matrix, _dimension) {
     };
 
     this.reverseGauss = function () {
-        this.vector[this.dimension - 1] = Math.round(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
+        this.resultVector[this.dimension - 1] = Math.round(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
         for (var i = this.dimension - 2; i >= 0; i--) {
             var temp = 0;
             for (var j = i + 1; j < this.dimension; j++) {
-                temp += this.matrix[j][i] * this.vector[j];
+                temp += this.matrix[j][i] * this.resultVector[j];
             }
-            this.vector[i] = Math.round((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
+            this.resultVector[i] = Math.round((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
         }
     };
+
+    this.checkDirectGauss = function(){
+        for(var i=0; i<this.dimension;i++){
+            if (this.matrix[this.dimension][i]==0) {
+                return 1;
+            }
+        }
+
+        return 0; // matrix correct
+    }
+
+    this.checkReverseGauss = function(){
+        return 0;
+    }
+
+    this.getResult = function() {
+        return this.resultVector;
+    }
 
     this.calculate = function () {
         // direct
         this.directGauss();
 
+        var directGaussValidationResult = this.checkDirectGauss();
+        if (directGaussValidationResult != 0)
+        {
+            return directGaussValidationResult;
+        }
+
         // reverse
         this.reverseGauss();
 
-        return this.vector;
+        var reverseGaussCheckResult = this.checkReverseGauss();
+        if (reverseGaussCheckResult != 0){
+            return reverseGaussCheckResult;
+        }
+
+        return 0;
     }
 }
