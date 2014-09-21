@@ -63,7 +63,7 @@
     <div class="row">
 
         <div class="col-md-3">
-            <p class="lead">Shop Name</p>
+            <p class="lead">Select SLE rank</p>
             <div class="list-group" id="left-menu">
                 <a href="#" onclick="arrangeMatrix(2, '#equationContainer');" class="list-group-item">Rank 2</a>
                 <a href="#" onclick="arrangeMatrix(3, '#equationContainer');" class="list-group-item">Rank 3</a>
@@ -76,12 +76,11 @@
         <div class="col-md-9">
 
             <div class="thumbnail">
-                <div id="test" class="form-inline">
-                    <input type="text" class="form-control col-sm-1"  />
-                    <input type="text" class="form-control col-sm-1"  />
-                </div>
-                <div id="equationContainer" style="width:800px; height: 300px;" class ="text-center">
+                <div id="equationContainer" style="width:800px; height: 233px;" class ="text-center">
                     <h1>Select SLE rank at the left menu</h1>
+                </div>
+                <div id="calcButtonPlaceholder" class="text-center" style="width:800px; display: none;">
+                    <button class="btn btn-primary" onclick="getInputsAndCalculate();">Calculate</button>
                 </div>
             </div>
 
