@@ -88,6 +88,11 @@ function changeSelectedMenu(_activeLinkNum){
 }
 
 function getInputsAndCalculate(){
+
+    if (!validateInterface()){
+        return;
+    }
+
     var dimension = getDimension();
     var matrix = new Array(dimension+1);
     var freeCoeffVector = new Array(dimension);
@@ -122,4 +127,57 @@ function displayResults(resultVector, containerName){
     html += "</ul>";
 
     $(containerName).after().html(html);
+}
+
+function validateInterface(){
+    var dim = getDimension();
+
+    for (var i=0; i< dim;i++){
+        for (var j=0; j<dim; j++){
+            console.log("row=" + i + " col =" + j);
+            if(!validateTextBox(getTextBoxCoeffId(i, j))){
+                return false;
+            }
+        }
+
+        console.log("Validate result text box = " + i);
+        if(!validateTextBox(getTextBoxResultId(i))){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+function validateTextBox(textBoxId){
+    if (!isFilled(textBoxId))
+        return false;
+    if(!isNumeric(textBoxId))
+        return false;
+
+    return true;
+}
+
+function isFilled(textBoxId){
+    var textBox = document.getElementById(textBoxId);
+    if (textBox.value.length == 0){
+        alert("Some fields are empty. Fill them all!")
+        textBox.focus();
+        return false;
+    }
+
+    return true;
+}
+
+function isNumeric(textBoxId){
+    var textBox = document.getElementById(textBoxId);
+    var num = +textBox.value;
+    if(isNaN(num)){
+        alert("Input data is not valid.")
+        textBox.focus();
+        textBox.select();
+        return false;
+    }
+
+    return true;
 }
