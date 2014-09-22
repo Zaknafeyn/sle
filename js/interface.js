@@ -138,6 +138,7 @@ function displayResults(errorCode, resultVector, containerName){
 
     $(containerName).after().html(html);
 }
+
 function validateInterface(){
     var dim = getDimension();
 
