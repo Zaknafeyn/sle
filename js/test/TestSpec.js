@@ -82,6 +82,20 @@ describe("Control example sle 3", function() {
 });
 
 describe("Control example sle 4", function() {
+    it("Calculates sle with float roots", function() {
+        var matrix = [[2,4],[1,7],[2,9]];
+        var result = [0.5,1];
+        var gaussian = new Gaussian(matrix, 2);
+        var validationResult = gaussian.validate();
+        var errCode = gaussian.calculate();
+        expect(0).toEqual(validationResult);
+        expect(0).toEqual(errCode);
+        expect(result).toEqual(gaussian.getResult());
+    });
+});
+
+
+describe("Control example sle 5", function() {
     it("Calculates matrix", function() {
         var matrix = [[0,1000,-3,4],[1,3,4,0],[3,1,1,-2],[2,-5,4,-3],[-1,-2,-1,4]];
         var result = [2,3,-1];

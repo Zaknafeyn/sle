@@ -37,14 +37,47 @@ function Gaussian(_matrix, _dimension) {
     };
 
     this.reverseGauss = function () {
-        this.resultVector[this.dimension - 1] = Math.round(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
+        this.resultVector[this.dimension - 1] = this.roundResult(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
         for (var i = this.dimension - 2; i >= 0; i--) {
             var temp = 0;
             for (var j = i + 1; j < this.dimension; j++) {
                 temp += this.matrix[j][i] * this.resultVector[j];
             }
-            this.resultVector[i] = Math.round((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
+            this.resultVector[i] = this.roundResult((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
         }
+    };
+
+    this.roundResult = function(value){
+        //return Math.round(value);
+
+        var epsilon = 0.00001;
+
+        var absValue = Math.abs(value);
+        var sign = Math.round(value/absValue);
+
+        var floorValue = Math.floor(absValue);
+        var ceilValue = Math.ceil(absValue);
+        var roundValue = Math.round(absValue);
+
+        console.log("value = " + value + " absValue = " + absValue + " sign = " + sign + " floorValue = " + floorValue +  " ceilValue = " + ceilValue + " roundValue = " + roundValue);
+
+        if (value == 0)
+            return value;
+
+        if (Math.abs(floorValue - absValue) < epsilon){
+            console.log("return value = " + floorValue * sign);
+            return floorValue * sign; // get sign of value
+        }
+
+        if (Math.abs(ceilValue - absValue) < epsilon)
+        {
+            console.log("return value = " + floorValue * sign);
+            return ceilValue * sign;
+        }
+
+        console.log("return value = " + value);
+        return value;
+
     };
 
     this.checkDirectGauss = function(){
@@ -55,15 +88,15 @@ function Gaussian(_matrix, _dimension) {
         }
 
         return 0; // matrix correct
-    }
+    };
 
     this.checkReverseGauss = function(){
         return 0;
-    }
+    };
 
     this.getResult = function() {
         return this.resultVector;
-    }
+    };
 
     this.calculate = function () {
         // direct
