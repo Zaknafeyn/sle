@@ -123,7 +123,7 @@ function displayResults(errorCode, resultVector, containerName){
 
     var html = "<h3>Results</h3>";
 
-    if(errorCode == 1){
+    if(errorCode != 0){
 
         html += '<label class="label-danger">There are no solutions for this SLE</label>';
     }

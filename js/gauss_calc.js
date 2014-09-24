@@ -22,18 +22,73 @@ function Gaussian(_matrix, _dimension) {
         if (this.resultVector.length != this.dimension)
             return 3;
 
+        for(var i=0; i<this.dimension;i++){
+            var allZeroes = true;
+            for(var j=0; j<this.dimension && allZeroes == true;j++){
+                if (this.matrix[i][j] != 0)
+                  allZeroes = false;
+            }
+
+            if (allZeroes == true)
+            return 4; // all coeffs in single row are zero
+        }
+
         return 0;
     };
 
     this.directGauss = function () {
         for (var i = 0; i < this.dimension - 1; i++) {
             for (var j = i + 1; j < this.dimension; j++) {
+                if (this.matrix[i][j] == 0) { // zero division
+                    return 1;
+                }
+
                 var temp = this.matrix[i][i] / this.matrix[i][j];
                 for (var k = 0; k <= this.dimension; k++) {
                     this.matrix[k][j] = this.matrix[k][j] * temp - this.matrix[k][i];
                 }
             }
         }
+
+        return 0;
+    };
+
+    this.exchangeRows = function(row1, row2){
+        if(row1 == row2)
+            return;
+        for (var i=0; i<= this.dimension; i++){
+            var temp = this.matrix[i][row1];
+            this.matrix[i][row1] = this.matrix[i][row2];
+            this.matrix[i][row2] = temp;
+        }
+    };
+
+    this.copyMatrix = function(matrix){
+        var newMatrix = new Array();
+        for (var i=0; i<= this.dimension;i++){
+            newMatrix[i] = new Array();
+            for(var j=0;j<this.dimension;j++){
+                newMatrix[i][j] = matrix[i][j];
+            }
+        }
+        return newMatrix;
+    };
+
+    this.runDirectGauss = function(){
+        var reserveMatrix = this.copyMatrix(this.matrix);
+        var directGaussResult = 1;
+        for(var i=0; i<this.dimension-1 && directGaussResult != 0;i++){
+            this.matrix = this.copyMatrix(reserveMatrix);
+            /*/if (i > 1 ){
+                // return back after previous exchange
+                this.exchangeRows(0, i-1);
+            }*/
+            this.exchangeRows(0, i);
+
+            directGaussResult = this.directGauss();
+        }
+
+        return directGaussResult;
     };
 
     this.reverseGauss = function () {
@@ -59,23 +114,23 @@ function Gaussian(_matrix, _dimension) {
         var ceilValue = Math.ceil(absValue);
         var roundValue = Math.round(absValue);
 
-        console.log("value = " + value + " absValue = " + absValue + " sign = " + sign + " floorValue = " + floorValue +  " ceilValue = " + ceilValue + " roundValue = " + roundValue);
+        //console.log("value = " + value + " absValue = " + absValue + " sign = " + sign + " floorValue = " + floorValue +  " ceilValue = " + ceilValue + " roundValue = " + roundValue);
 
         if (value == 0)
             return value;
 
         if (Math.abs(floorValue - absValue) < epsilon){
-            console.log("return value = " + floorValue * sign);
+            //console.log("return value = " + floorValue * sign);
             return floorValue * sign; // get sign of value
         }
 
         if (Math.abs(ceilValue - absValue) < epsilon)
         {
-            console.log("return value = " + floorValue * sign);
+            //console.log("return value = " + floorValue * sign);
             return ceilValue * sign;
         }
 
-        console.log("return value = " + value);
+        //console.log("return value = " + value);
         return value;
 
     };
@@ -100,7 +155,7 @@ function Gaussian(_matrix, _dimension) {
 
     this.calculate = function () {
         // direct
-        this.directGauss();
+        this.runDirectGauss();
 
         var directGaussValidationResult = this.checkDirectGauss();
         if (directGaussValidationResult != 0)
