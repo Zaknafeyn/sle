@@ -111,8 +111,31 @@ function getInputsAndCalculate(){
     var matrixCalc = new Gaussian(matrix, dimension);
     var errCode = matrixCalc.calculate();
     var resultVector = matrixCalc.getResult();
+    var errorVector = matrixCalc.getErrorVector();
 
     displayResults(errCode, resultVector, "#solutionPlaceholder")
+    displayErrorVector(errCode, errorVector, "#errorVectorPlaceholder")
+
+}
+
+function displayErrorVector(errorCode, errorVector, containerName) {
+    if(errorCode != 0){
+        return;
+    }
+
+    $(containerName).show();
+    // clean container
+    $(containerName).html("");
+
+    var html = '<h3 class="danger">Error vector</h3>';
+
+    html += '<ul class="list-unstyled">';
+    for (var i = 0; i < errorVector.length; i++) {
+        html += '<li><label>(' + (i + 1) + ')&nbsp;=&nbsp;' + errorVector[i] + '</label></li>';
+    }
+    html += "</ul>";
+
+    $(containerName).after().html(html);
 }
 
 function displayResults(errorCode, resultVector, containerName){

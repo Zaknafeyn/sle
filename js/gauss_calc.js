@@ -7,6 +7,7 @@ function Gaussian(_matrix, _dimension) {
 
     this.dimension = _dimension;
     this.resultVector = new Array(this.dimension);
+    this.errorVector = new Array(this.dimension);
 
     this.validate = function () {
 
@@ -153,6 +154,10 @@ function Gaussian(_matrix, _dimension) {
         return this.resultVector;
     };
 
+    this.getErrorVector = function(){
+        return this.errorVector;
+    }
+
     this.calculate = function () {
         // direct
         this.runDirectGauss();
@@ -171,6 +176,17 @@ function Gaussian(_matrix, _dimension) {
             return reverseGaussCheckResult;
         }
 
+        this.calculateErrorVector();
+
         return 0;
+    }
+
+    this.calculateErrorVector = function(){
+        for (var row = 0; row < this.dimension; row++) {
+            this.errorVector[row] = this.matrix[this.dimension][row];
+            for (var col = 0; col < this.dimension; col++) {
+                this.errorVector[row] -= this.matrix[col][row] * this.resultVector[col];
+            }
+        }
     }
 }
