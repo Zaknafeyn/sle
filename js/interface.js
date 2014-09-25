@@ -7,6 +7,7 @@ var currentDimension = 0;
 function resetInterface(){
     // hide results
     $("#solutionPlaceholder").hide();
+    $("#errorVectorPlaceholder").hide();
 
     var menuAnchors = document.getElementById("left-menu").getElementsByTagName("a");
     for (var i=0; i<menuAnchors.length; i++){
