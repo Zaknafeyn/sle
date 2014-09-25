@@ -124,7 +124,7 @@ describe("Control example sle 5", function() {
 describe("Control example sle 6", function() {
     it("Calculates matrix", function() {
         var matrix = [[0,1000,-3,4],[1,3,4,0],[3,1,1,-2],[2,-5,4,-3],[-1,-2,-1,4]];
-        var result = [2,3,-1,0];
+        var result = [ -0.012028491449793973, 0.9354230758570989, 0.5555555555555555, -1.3333333333333333 ];
         var gaussian = new Gaussian(matrix, 4);
         var errCode = gaussian.calculate();
         expect(0).toEqual(gaussian.validate());
