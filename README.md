@@ -9,8 +9,11 @@ Solve the system of linear equations using Gaussian elimination (also known as r
 Calculate the X vector and vector of errors (E = B-A*X):
 
 1*x2 + 3*x3 + 2*x4 = -1;
+
 1000*x1 + 3*x2 + x3 - 5*x4 = -2;
+
 -3*x1 + 4*x2 + x3 + 4*x4 = -1;
+
 4*x1 - 2*x3 - 3*x4 = 4.
 
 The program should contain:
