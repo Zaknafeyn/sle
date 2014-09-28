@@ -4,7 +4,7 @@
 
 function Gaussian(_matrix, _dimension, _displaySolution) {
     this.matrix = _matrix;
-    this.display = _displaySolution;
+    this.displaySolution = _displaySolution;
 
     this.dimension = _dimension;
     this.resultVector = new Array(this.dimension);
@@ -40,9 +40,24 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
 
     this.directGauss = function () {
         for (var i = 0; i < this.dimension - 1; i++) {
+
+            var nextRow = i+1;
+            while (this.matrix[i][i] == 0 && nextRow < this.dimension)
+            {
+                if (nextRow > i + 1)
+                {
+                    this.exchangeRows(i, nextRow-1);
+                }
+                this.exchangeRows(i, nextRow++);
+            }
+
+            if (this.matrix[i][i] == 0)
+                return 1;
+
             for (var j = i + 1; j < this.dimension; j++) {
-                if (this.matrix[i][j] == 0) { // zero division
-                    return 1;
+
+                if (this.matrix[i][j] == 0) {
+                    continue;
                 }
 
                 var temp = this.matrix[i][i] / this.matrix[i][j];
@@ -50,7 +65,8 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
                     this.matrix[k][j] = this.matrix[k][j] * temp - this.matrix[k][i];
                 }
 
-                this.display.addStep(this,matrix, this.dimension); }
+                this.displaySolution.addStep(this.matrix, this.dimension);
+            }
         }
 
         return 0;
@@ -67,9 +83,9 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
     };
 
     this.copyMatrix = function(matrix){
-        var newMatrix = new Array();
+        var newMatrix = [];
         for (var i=0; i<= this.dimension;i++){
-            newMatrix[i] = new Array();
+            newMatrix[i] = [];
             for(var j=0;j<this.dimension;j++){
                 newMatrix[i][j] = matrix[i][j];
             }
@@ -84,14 +100,14 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
             this.matrix = this.copyMatrix(reserveMatrix);
             this.exchangeRows(0, i);
             if (i != 0) {
-                this.display.addHeader("Reorder matrix. Apply direct Gaussian pass for modified matrix")
+                this.displaySolution.addHeader("Reorder matrix. Apply direct Gaussian pass for modified matrix")
             }
             directGaussResult = this.directGauss();
         }
 
         if (directGaussResult != 0) {
             // impossible to solve by gaussian method
-            this.display.addAlert("Impossible to calculate sle")
+            this.displaySolution.addAlert("Impossible to calculate sle")
         }
 
         return directGaussResult;
@@ -165,8 +181,10 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
 
     this.calculate = function () {
         // direct
-        this.display.addHeader("Direct Gaussian");
-        this.runDirectGauss();
+        this.displaySolution.addHeader("Direct Gaussian");
+        var directResult = this.runDirectGauss();
+        if (directResult != 0)
+            return directResult;
 
         var directGaussValidationResult = this.checkDirectGauss();
         if (directGaussValidationResult != 0)
@@ -175,7 +193,7 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
         }
 
         // reverse
-        this.display.addHeader("Reverse Gaussian");
+        this.displaySolution.addHeader("Reverse Gaussian");
         this.reverseGauss();
 
         var reverseGaussCheckResult = this.checkReverseGauss();

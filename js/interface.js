@@ -3,16 +3,14 @@
  */
 
 var currentDimension = 0;
-var displaySolution = new DisplaySolution("#solutionStepsPlaceholder");
 
 function resetInterface(){
+
+
     // hide results
     $("#solutionStepsPlaceholder").hide();
     $("#solutionPlaceholder").hide();
     $("#errorVectorPlaceholder").hide();
-    displaySolution.clearContainer();
-    displaySolution.hide();
-
 
     var menuAnchors = document.getElementById("left-menu").getElementsByTagName("a");
     for (var i=0; i<menuAnchors.length; i++){
@@ -114,14 +112,24 @@ function getInputsAndCalculate(){
 
     matrix[dimension] = freeCoeffVector;
 
+    var displaySolution = new DisplaySolution("#solutionStepsPlaceholder");
+    displaySolution.clearContainer();
+
     var matrixCalc = new Gaussian(matrix, dimension, displaySolution);
     var errCode = matrixCalc.calculate();
+
+    displaySolution.displaySolution();
+
+    if (errCode != 0){
+        return;
+    }
+
     var resultVector = matrixCalc.getResult();
     var errorVector = matrixCalc.getErrorVector();
 
     displayResults(errCode, resultVector, "#solutionPlaceholder");
     displayErrorVector(errCode, errorVector, "#errorVectorPlaceholder");
-    displaySolution.displaySolution();
+
 
 }
 
@@ -192,10 +200,7 @@ function validateInterface(){
 function validateTextBox(textBoxId){
     if (!isFilled(textBoxId))
         return false;
-    if(!isNumeric(textBoxId))
-        return false;
-
-    return true;
+    return isNumeric(textBoxId);
 }
 
 function isFilled(textBoxId){
