@@ -2,8 +2,9 @@
  * Created by Valik on 12.09.2014.
  */
 
-function Gaussian(_matrix, _dimension) {
+function Gaussian(_matrix, _dimension, _displaySolution) {
     this.matrix = _matrix;
+    this.display = _displaySolution;
 
     this.dimension = _dimension;
     this.resultVector = new Array(this.dimension);
@@ -48,7 +49,8 @@ function Gaussian(_matrix, _dimension) {
                 for (var k = 0; k <= this.dimension; k++) {
                     this.matrix[k][j] = this.matrix[k][j] * temp - this.matrix[k][i];
                 }
-            }
+
+                this.display.addStep(this,matrix, this.dimension); }
         }
 
         return 0;
@@ -80,13 +82,16 @@ function Gaussian(_matrix, _dimension) {
         var directGaussResult = 1;
         for(var i=0; i<this.dimension-1 && directGaussResult != 0;i++){
             this.matrix = this.copyMatrix(reserveMatrix);
-            /*/if (i > 1 ){
-                // return back after previous exchange
-                this.exchangeRows(0, i-1);
-            }*/
             this.exchangeRows(0, i);
-
+            if (i != 0) {
+                this.display.addHeader("Reorder matrix. Apply direct Gaussian pass for modified matrix")
+            }
             directGaussResult = this.directGauss();
+        }
+
+        if (directGaussResult != 0) {
+            // impossible to solve by gaussian method
+            this.display.addAlert("Impossible to calculate sle")
         }
 
         return directGaussResult;
@@ -156,10 +161,11 @@ function Gaussian(_matrix, _dimension) {
 
     this.getErrorVector = function(){
         return this.errorVector;
-    }
+    };
 
     this.calculate = function () {
         // direct
+        this.display.addHeader("Direct Gaussian");
         this.runDirectGauss();
 
         var directGaussValidationResult = this.checkDirectGauss();
@@ -169,6 +175,7 @@ function Gaussian(_matrix, _dimension) {
         }
 
         // reverse
+        this.display.addHeader("Reverse Gaussian");
         this.reverseGauss();
 
         var reverseGaussCheckResult = this.checkReverseGauss();
@@ -179,7 +186,7 @@ function Gaussian(_matrix, _dimension) {
         this.calculateErrorVector();
 
         return 0;
-    }
+    };
 
     this.calculateErrorVector = function(){
         for (var row = 0; row < this.dimension; row++) {

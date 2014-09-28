@@ -3,11 +3,16 @@
  */
 
 var currentDimension = 0;
+var displaySolution = new DisplaySolution("#solutionStepsPlaceholder");
 
 function resetInterface(){
     // hide results
+    $("#solutionStepsPlaceholder").hide();
     $("#solutionPlaceholder").hide();
     $("#errorVectorPlaceholder").hide();
+    displaySolution.clearContainer();
+    displaySolution.hide();
+
 
     var menuAnchors = document.getElementById("left-menu").getElementsByTagName("a");
     for (var i=0; i<menuAnchors.length; i++){
@@ -109,13 +114,14 @@ function getInputsAndCalculate(){
 
     matrix[dimension] = freeCoeffVector;
 
-    var matrixCalc = new Gaussian(matrix, dimension);
+    var matrixCalc = new Gaussian(matrix, dimension, displaySolution);
     var errCode = matrixCalc.calculate();
     var resultVector = matrixCalc.getResult();
     var errorVector = matrixCalc.getErrorVector();
 
-    displayResults(errCode, resultVector, "#solutionPlaceholder")
-    displayErrorVector(errCode, errorVector, "#errorVectorPlaceholder")
+    displayResults(errCode, resultVector, "#solutionPlaceholder");
+    displayErrorVector(errCode, errorVector, "#errorVectorPlaceholder");
+    displaySolution.displaySolution();
 
 }
 
@@ -195,7 +201,7 @@ function validateTextBox(textBoxId){
 function isFilled(textBoxId){
     var textBox = document.getElementById(textBoxId);
     if (textBox.value.length == 0){
-        alert("Some fields are empty. Fill them all!")
+        alert("Some fields are empty. Fill them all!");
         textBox.focus();
         return false;
     }
@@ -207,7 +213,7 @@ function isNumeric(textBoxId){
     var textBox = document.getElementById(textBoxId);
     var num = +textBox.value;
     if(isNaN(num)){
-        alert("Input data is not valid.")
+        alert("Input data is not valid.");
         textBox.focus();
         textBox.select();
         return false;
