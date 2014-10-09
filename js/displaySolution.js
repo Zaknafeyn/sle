@@ -25,23 +25,23 @@ function DisplaySolution(_solutionContainerName){
         console.log("addAlert - " + string);
     };
 
-    this.addText = function(string){
-        html += '<label>' + string + '<label>'
-    };
-
     this.addStep = function(matrix, dimension){
-        html += '<h5>Step - ' + stepCalc++ + '</h5>';
-        html += '<ul class="list-unstyled">';
-        for (var row =0; row < dimension; row++){
-            html += '<li><label>(' + (row + 1) + ')&nbsp;';
-            for(var col = 0; col <= dimension; col++){
-                html += matrix[col][row] + '&nbsp;';
-            }
-            html +=  '</label></li>'
-        }
-        html += "</ul>";
+        var stepHtml = "";
 
-        html += "<hr>";
+        stepHtml += '<h5>Step - ' + stepCalc++ + '</h5>';
+        stepHtml += '<ul class="list-unstyled">';
+        for (var row =0; row < dimension; row++){
+            stepHtml += '<li><label>(' + (row + 1) + ')&nbsp;';
+            for(var col = 0; col <= dimension; col++){
+                stepHtml += matrix[col][row] + '&nbsp;';
+            }
+            stepHtml +=  '</label></li>'
+        }
+        stepHtml += "</ul>";
+
+        stepHtml += "<hr>";
+
+        html += stepHtml;
 
         console.log("add step" + stepCalc);
     };

@@ -9,6 +9,7 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
     this.dimension = _dimension;
     this.resultVector = new Array(this.dimension);
     this.errorVector = new Array(this.dimension);
+    this.rootsOrder = new Array(this.dimension);
 
     this.validate = function () {
 
@@ -38,7 +39,68 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
         return 0;
     };
 
+    this.getMaxElementIndex = function(vector, initialIndex){
+        var maxIndex = initialIndex;
+        var maxElement = vector[initialIndex];
+        while (maxElement == 0 && maxIndex <= this.dimension){
+            maxIndex++;
+            maxElement = vector[maxIndex];
+        }
+
+        for (var i=initialIndex+1; i< this.dimension; i++){
+            if (Math.abs(maxElement) < Math.abs(vector[i]) && vector[i] != 0){
+                maxElement = vector[i];
+                maxIndex = i;
+            }
+        }
+
+        return maxIndex;
+    };
+
     this.directGauss = function () {
+        for (var i = 0; i < this.dimension - 1; i++) {
+
+            var vector = new Array(this.dimension);
+            for(var i_max = i; i_max<this.dimension; i_max++){
+                vector[i_max] = this.matrix[i_max][i];
+            }
+
+            var maxIndex = this.getMaxElementIndex(vector, i);
+            this.exchangeCols(i, maxIndex);
+
+            var nextRow = i+1;
+            while (this.matrix[i][i] == 0 && nextRow < this.dimension)
+            {
+                if (nextRow > i + 1)
+                {
+                    this.exchangeRows(i, nextRow-1);
+                }
+                this.exchangeRows(i, nextRow++);
+            }
+
+            if (this.matrix[i][i] == 0)
+                return 1;
+
+            for (var j = i + 1; j < this.dimension; j++) {
+
+                if (this.matrix[i][j] == 0) {
+                    continue;
+                }
+
+                var temp = this.matrix[i][i] / this.matrix[i][j];
+                for (var k = 0; k <= this.dimension; k++) {
+                    this.matrix[k][j] = this.matrix[k][j] * temp - this.matrix[k][i];
+                }
+
+                this.displaySolution.addStep(this.matrix, this.dimension);
+            }
+        }
+
+        return 0;
+
+    };
+
+    this.oldDirectGauss = function () {
         for (var i = 0; i < this.dimension - 1; i++) {
 
             var nextRow = i+1;
@@ -70,6 +132,25 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
         }
 
         return 0;
+    };
+
+    this.exchangeCols = function(col1, col2){
+        if(col1 == col2)
+            return;
+        if (col1 > this.dimension-1 || col2 > this.dimension-1)
+            return; // error - columns are out of range
+
+        // exchange roots order
+        var temp1 = this.rootsOrder[col1];
+        this.rootsOrder[col1] = this.rootsOrder[col2];
+        this.rootsOrder[col2] = temp1;
+
+        // exchange columns
+        for(var i=0; i<this.dimension; i++){
+            var temp2 = this.matrix[col1][i];
+            this.matrix[col1][i] = this.matrix[col2][i];
+            this.matrix[col2][i] = temp2;
+        }
     };
 
     this.exchangeRows = function(row1, row2){
@@ -114,13 +195,17 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
     };
 
     this.reverseGauss = function () {
-        this.resultVector[this.dimension - 1] = this.roundResult(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
+        var rootIndex = this.rootsOrder[this.dimension-1];
+        this.resultVector[rootIndex] = this.roundResult(this.matrix[this.dimension][this.dimension-1] / this.matrix[this.dimension-1][this.dimension - 1]);
         for (var i = this.dimension - 2; i >= 0; i--) {
+
             var temp = 0;
             for (var j = i + 1; j < this.dimension; j++) {
-                temp += this.matrix[j][i] * this.resultVector[j];
+                temp += this.matrix[j][i] * this.resultVector[this.rootsOrder[j]];
             }
-            this.resultVector[i] = this.roundResult((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
+
+            var rootIndex = this.rootsOrder[i];
+            this.resultVector[rootIndex] = this.roundResult((this.matrix[this.dimension][i] - temp) / this.matrix[i][i]);
         }
     };
 
@@ -134,7 +219,7 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
 
         var floorValue = Math.floor(absValue);
         var ceilValue = Math.ceil(absValue);
-        var roundValue = Math.round(absValue);
+        //var roundValue = Math.round(absValue);
 
         //console.log("value = " + value + " absValue = " + absValue + " sign = " + sign + " floorValue = " + floorValue +  " ceilValue = " + ceilValue + " roundValue = " + roundValue);
 
@@ -179,9 +264,20 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
         return this.errorVector;
     };
 
+    this.arrangeRoots = function(){
+        for(var i=0; i<this.dimension; i++){
+            this.rootsOrder[i] = i;
+        }
+    };
+
     this.calculate = function () {
+        var originalMatrix = this.copyMatrix(this.matrix);
+
+        // initial roots arrangements
+        this.arrangeRoots();
+
         // direct
-        this.displaySolution.addHeader("Direct Gaussian");
+        this.displaySolution.addHeader("Direct Gaussian pass");
         var directResult = this.runDirectGauss();
         if (directResult != 0)
             return directResult;
@@ -193,7 +289,6 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
         }
 
         // reverse
-        this.displaySolution.addHeader("Reverse Gaussian");
         this.reverseGauss();
 
         var reverseGaussCheckResult = this.checkReverseGauss();
@@ -201,16 +296,16 @@ function Gaussian(_matrix, _dimension, _displaySolution) {
             return reverseGaussCheckResult;
         }
 
-        this.calculateErrorVector();
+        this.calculateErrorVector(originalMatrix);
 
         return 0;
     };
 
-    this.calculateErrorVector = function(){
+    this.calculateErrorVector = function(originalMatrix){
         for (var row = 0; row < this.dimension; row++) {
-            this.errorVector[row] = this.matrix[this.dimension][row];
+            this.errorVector[row] = originalMatrix[this.dimension][row];
             for (var col = 0; col < this.dimension; col++) {
-                this.errorVector[row] -= this.matrix[col][row] * this.resultVector[col];
+                this.errorVector[row] -= originalMatrix[this.rootsOrder[col]][row] * this.resultVector[this.rootsOrder[col]];
             }
         }
     }

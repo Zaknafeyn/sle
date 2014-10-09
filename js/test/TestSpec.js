@@ -55,6 +55,7 @@ describe("Check reverse Gauss method", function() {
         var matrix = [[2,0],[2,4],[6,8]];
         var resultVector = [1,2];
         var gaussian = new Gaussian(matrix, 2, new DisplaySolution(""));
+        gaussian.arrangeRoots();
         gaussian.reverseGauss();
         expect(resultVector).toEqual(gaussian.resultVector);
     });
@@ -124,7 +125,7 @@ describe("Control example sle 5", function() {
 describe("Control example sle 6", function() {
     it("Calculates matrix", function() {
         var matrix = [[0,1000,-3,4],[1,3,4,0],[3,1,1,-2],[2,-5,4,-3],[-1,-2,-1,4]];
-        var result = [ -0.01367139959432049, 1.213671399594321, 0.2936713995943204, -1.547342799188641 ];
+        var result = [ -0.013671399594320488, 1.2136713995943207, 0.2936713995943206, -1.5473427991886413 ];
         var gaussian = new Gaussian(matrix, 4, new DisplaySolution(""));
         var errCode = gaussian.calculate();
         expect(0).toEqual(gaussian.validate());
