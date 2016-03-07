@@ -1,4 +1,4 @@
-sle
+[SLE](http://zaknafeyn.github.io/sle/) 
 ===
 
 System of linear equations
